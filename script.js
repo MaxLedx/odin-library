@@ -1,4 +1,4 @@
-const myLibrary = [];
+let myLibrary = [];
 
 function Book(title, author, pages, isRead) {
     this.id = crypto.randomUUID();
@@ -9,11 +9,16 @@ function Book(title, author, pages, isRead) {
     this.info = function () {
         return `${this.title} by ${this.author}, ${this.pages} pages, ${this.isRead ? 'already read' : 'not read yet'}.`;
     }
+    this.toggleRead = () => this.isRead = !this.isRead;
 }
 
 function addBookToLibrary(title, author, pages, isRead) {
     const book = new Book(title, author, pages, isRead);
     myLibrary.push(book);
+}
+
+function removeBookFromLibrary(id) {
+    myLibrary = myLibrary.filter(book => book.id !== id);
 }
 
 function display() {
@@ -61,11 +66,19 @@ function createBookElement(book) {
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
     deleteButton.classList.add('book-delete-button');
+    deleteButton.addEventListener('click', () => {
+        removeBookFromLibrary(book.id);
+        display();
+    });
     buttons.appendChild(deleteButton);
 
     const toggleReadButton = document.createElement('button');
     toggleReadButton.textContent = book.isRead ? 'Mark unread' : 'Mark read';
     toggleReadButton.classList.add('book-toggle-read-button');
+    toggleReadButton.addEventListener('click', () => {
+        book.toggleRead();
+        display();
+    });
     buttons.appendChild(toggleReadButton);
 
     element.appendChild(buttons);
@@ -84,13 +97,23 @@ const newBookIsRead = document.querySelector('#read');
 
 newBookButton.addEventListener('click', () => newBookDialog.showModal());
 
-newBookDialogCloseButton.addEventListener('click', () => newBookDialog.close());
+newBookDialogCloseButton.addEventListener('click', () => closeDialog());
 
 newBookForm.addEventListener('submit', event => {
     event.preventDefault();
-    const book = new Book(newBookTitle.value, newBookAuthor.value, newBookPages.value, newBookIsRead.checked);
-    myLibrary.push(book);
+    addBookToLibrary(newBookTitle.value, newBookAuthor.value, newBookPages.value, newBookIsRead.checked);
+    closeDialog();
+    clearForm();
     display();
 });
 
-display();
+function clearForm() {
+    newBookTitle.value = null;
+    newBookAuthor.value = null;
+    newBookPages.value = null;
+    newBookIsRead.value = null;
+}
+
+function closeDialog() {
+    newBookDialog.close();
+}
