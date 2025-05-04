@@ -111,7 +111,7 @@ function clearForm() {
     newBookTitle.value = null;
     newBookAuthor.value = null;
     newBookPages.value = null;
-    newBookIsRead.value = null;
+    newBookIsRead.checked = null;
 }
 
 function closeDialog() {
