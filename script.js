@@ -1,8 +1,4 @@
-const myLibrary = [
-    new Book('Test', 'One', 45, true),
-    new Book('Test', 'One', 45, false),
-    new Book('Test', 'One', 45, true)
-];
+const myLibrary = [];
 
 function Book(title, author, pages, isRead) {
     this.id = crypto.randomUUID();
@@ -22,6 +18,9 @@ function addBookToLibrary(title, author, pages, isRead) {
 
 function display() {
     const library = document.querySelector('.library');
+    while (library.firstChild) {
+        library.removeChild(library.lastChild);
+    }
     for (const book of myLibrary) {
         const bookElement = createBookElement(book);
         library.appendChild(bookElement);
@@ -73,5 +72,25 @@ function createBookElement(book) {
 
     return element;
 }
+
+const newBookButton = document.querySelector('.new-book-button');
+const newBookDialog = document.querySelector('.new-book-dialog');
+const newBookDialogCloseButton = document.querySelector('.new-book-dialog-close-button');
+const newBookForm = document.querySelector('.new-book-form');
+const newBookTitle = document.querySelector('#title');
+const newBookAuthor = document.querySelector('#author');
+const newBookPages = document.querySelector('#pages');
+const newBookIsRead = document.querySelector('#read');
+
+newBookButton.addEventListener('click', () => newBookDialog.showModal());
+
+newBookDialogCloseButton.addEventListener('click', () => newBookDialog.close());
+
+newBookForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const book = new Book(newBookTitle.value, newBookAuthor.value, newBookPages.value, newBookIsRead.checked);
+    myLibrary.push(book);
+    display();
+});
 
 display();
