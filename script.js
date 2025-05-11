@@ -1,15 +1,17 @@
 let myLibrary = [];
 
-function Book(title, author, pages, isRead) {
-    this.id = crypto.randomUUID();
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.isRead = isRead;
-    this.info = function () {
-        return `${this.title} by ${this.author}, ${this.pages} pages, ${this.isRead ? 'already read' : 'not read yet'}.`;
+class Book {
+    constructor(title, author, pages, isRead) {
+        this.id = crypto.randomUUID();
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.isRead = isRead;
+        this.info = function () {
+            return `${this.title} by ${this.author}, ${this.pages} pages, ${this.isRead ? 'already read' : 'not read yet'}.`;
+        };
+        this.toggleRead = () => this.isRead = !this.isRead;
     }
-    this.toggleRead = () => this.isRead = !this.isRead;
 }
 
 function addBookToLibrary(title, author, pages, isRead) {
